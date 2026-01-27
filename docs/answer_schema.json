@@ -1,0 +1,14 @@
+{
+    "answer": "string",
+    "citations": [
+        {
+            "doc_id": "string",
+            "source": "string",
+            "chunk_id": "string"
+        }
+    ],
+    "trust_score": 0.0,
+    "confidence": "high | medium | low",
+    "status": "trusted | untrusted | refused",
+    "generated_at": "ISO-8601 timestamp"
+}
