@@ -1,22 +1,28 @@
 from app.rag.retriever import RetrieverAgent
+from app.agents.generator import LLMGeneratorAgent
 import os
 
 def main():
-    print("Initializing Retriever Agent...")
+    print("Initializing Agents...")
     try:
-        agent = RetrieverAgent()
+        retriever = RetrieverAgent()
+        generator = LLMGeneratorAgent()
         
-        query = "What is the FactFlow system?"
-        print(f"Query: {query}")
+        query = "What is the FactFlow system architecture?"
+        print(f"\nQuery: {query}")
         
-        results = agent.retrieve(query)
+        # Step 2: Retrieve
+        print("Retrieving documents...")
+        results = retriever.retrieve(query)
+        print(f"Retrieved {len(results)} chunks.")
         
-        print(f"\nRetrieved {len(results)} chunks:")
-        for i, res in enumerate(results):
-            print(f"\nChunk {i+1}:")
-            print(f"Score: {res['score']:.4f}")
-            print(f"Content: {res['content'][:200]}...") # Truncate for display
-            print(f"Metadata: {res['metadata']}")
+        # Step 3: Generate
+        print("Generating answer...")
+        answer = generator.generate(query, results)
+        
+        print("\n=== Generated Answer ===")
+        print(answer)
+        print("========================")
             
     except Exception as e:
         print(f"Error: {e}")
