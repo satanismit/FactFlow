@@ -8,7 +8,6 @@ __pycache__/
 *$py.class
 venv/
 env/
-myenv/
 
 # OS
 .DS_Store
