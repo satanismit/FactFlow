@@ -99,3 +99,8 @@ COMPARE -->|Changed| STALE[Document Stale]
 
 STALE --> ALERT[Notify Knowledge Refresh Agent]
 ALERT --> REFRESH
+
+
+Hybird Retriever
+semantic cache
+index manager 
