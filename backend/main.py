@@ -2,6 +2,7 @@ from app.rag.retriever import RetrieverAgent
 from app.agents.generator import LLMGeneratorAgent
 from app.rag.validator import AnswerValidatorAgent
 from app.rag.refresh import KnowledgeRefreshAgent
+from app.rag.watcher import DocumentWatcherAgent
 import os
 import sys
 
@@ -17,7 +18,8 @@ def main():
         retriever = RetrieverAgent()
         generator = LLMGeneratorAgent()
         validator = AnswerValidatorAgent()
-        refresher = KnowledgeRefreshAgent() # Instantiated KnowledgeRefreshAgent
+        refresher = KnowledgeRefreshAgent()
+        watcher = DocumentWatcherAgent()
         
         # Test Query - Try IPSec first since we know it's in the retrieved chunks
         query ="what is the outline of this course  DESIGN PATTERNS & FRAMEWORKS ?"
@@ -37,17 +39,27 @@ def main():
         print("Validating answer...\n")
         validation_result = validator.validate(answer, results)
         
-        # Step 4: Knowledge Refresh (Demonstration of usage)
-        # In a real scenario, this might be triggered by the Validator or Hallucination Detector
-        print("\n[System Check] Checking for stale knowledge (demonstration)...")
-        # Simulating a refresh trigger for a specific reason, without actual documents to update for this test
-        refresh_result = refresher.refresh(
-            reason="manual_trigger_check", 
-            documents=[] # No documents to update in this test run, just showing the call
-        )
-        print(f"   Refresh Status: {refresh_result['status']}")
-        if 'message' in refresh_result:
-            print(f"   Refresh Message: {refresh_result['message']}")
+        # Step 4: Document Watch — check retrieved docs for staleness
+        print("\n" + "=" * 60)
+        print("DOCUMENT WATCH:")
+        print("=" * 60)
+        watch_result = watcher.check_documents(results)
+        print(f"   Stale: {watch_result['stale']}")
+        print(f"   Changed Documents: {watch_result['changed_documents']}")
+        print(f"   Reason: {watch_result['reason']}")
+        
+        # Step 5: Knowledge Refresh (triggered only if stale)
+        if watch_result['stale']:
+            print("\n[ALERT] Stale knowledge detected — triggering refresh...")
+            refresh_result = refresher.refresh(
+                reason=watch_result['reason'],
+                documents=results
+            )
+            print(f"   Refresh Type: {refresh_result['refresh_type']}")
+            print(f"   Updated: {refresh_result['updated_documents']} documents")
+            print(f"   Status: {refresh_result['status']}")
+        else:
+            print("   Knowledge is fresh — no refresh needed.")
         print("=" * 60)
         
         # Display Answer
