@@ -1,6 +1,7 @@
 from app.rag.retriever import RetrieverAgent
 from app.agents.generator import LLMGeneratorAgent
 from app.rag.validator import AnswerValidatorAgent
+from app.rag.refresh import KnowledgeRefreshAgent
 import os
 import sys
 
@@ -16,6 +17,7 @@ def main():
         retriever = RetrieverAgent()
         generator = LLMGeneratorAgent()
         validator = AnswerValidatorAgent()
+        refresher = KnowledgeRefreshAgent() # Instantiated KnowledgeRefreshAgent
         
         # Test Query - Try IPSec first since we know it's in the retrieved chunks
         query ="what is the outline of this course  DESIGN PATTERNS & FRAMEWORKS ?"
@@ -35,8 +37,20 @@ def main():
         print("Validating answer...\n")
         validation_result = validator.validate(answer, results)
         
-        # Display Answer
+        # Step 4: Knowledge Refresh (Demonstration of usage)
+        # In a real scenario, this might be triggered by the Validator or Hallucination Detector
+        print("\n[System Check] Checking for stale knowledge (demonstration)...")
+        # Simulating a refresh trigger for a specific reason, without actual documents to update for this test
+        refresh_result = refresher.refresh(
+            reason="manual_trigger_check", 
+            documents=[] # No documents to update in this test run, just showing the call
+        )
+        print(f"   Refresh Status: {refresh_result['status']}")
+        if 'message' in refresh_result:
+            print(f"   Refresh Message: {refresh_result['message']}")
         print("=" * 60)
+        
+        # Display Answer
         print("ANSWER:")
         print("=" * 60)
         print(answer)
