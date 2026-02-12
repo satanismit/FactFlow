@@ -5,10 +5,16 @@ from app.rag.refresh import KnowledgeRefreshAgent
 from app.rag.watcher import DocumentWatcherAgent
 import os
 import sys
+import hashlib
 
 # Fix encoding for Windows console
 if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8')
+
+def compute_hash(text: str) -> str:
+    """Compute SHA256 hash of text content."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
 
 def main():
     print("Initializing FactFlow System...")
@@ -30,6 +36,31 @@ def main():
         print("Retrieving relevant documents...")
         results = retriever.retrieve(query)
         print(f"   Retrieved {len(results)} chunks\n")
+        
+        # ── Content Hash Verification ──
+        print("=" * 60)
+        print("CONTENT HASH VERIFICATION:")
+        print("=" * 60)
+        for i, doc in enumerate(results):
+            metadata = doc.get('metadata', {})
+            content = doc.get('content', '')
+            stored_hash = metadata.get('content_hash', None)
+            doc_id = metadata.get('doc_id', 'Unknown')
+            chunk_id = metadata.get('chunk_id', 'N/A')
+            
+            if stored_hash:
+                current_hash = compute_hash(content)
+                status = "MATCH" if current_hash == stored_hash else "MISMATCH"
+                print(f"   Document ID: {doc_id} | Chunk: {chunk_id}")
+                print(f"   Stored Hash:  {stored_hash}")
+                print(f"   Current Hash: {current_hash}")
+                print(f"   Status: {status}")
+                print()
+            else:
+                print(f"   Document ID: {doc_id} | Chunk: {chunk_id}")
+                print(f"   Status: NO HASH STORED")
+                print()
+        print("=" * 60)
         
         # Step 2: Generate Answer
         print("Generating answer...\n")

@@ -1,5 +1,6 @@
 import os
 import sys
+import hashlib
 from datetime import datetime
 
 # Ensure backend directory is in path to import app
@@ -10,6 +11,11 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from app.core.config import settings
+
+def compute_hash(text: str) -> str:
+    """Compute SHA256 hash of text content."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
 
 def ingest_pdf_book(pdf_path: str):
     """
@@ -49,14 +55,19 @@ def ingest_pdf_book(pdf_path: str):
     # 5. Prepare metadata
     book_name = os.path.basename(pdf_path)
     timestamp = datetime.now().isoformat()
+    published_at = datetime.utcnow().isoformat()
     
     # Add metadata to each chunk
     for i, chunk in enumerate(chunks):
+        content_hash = compute_hash(chunk.page_content)
         chunk.metadata.update({
             "source": book_name,
+            "doc_id": book_name,
             "chunk_id": i,
             "total_chunks": len(chunks),
             "ingestion_date": timestamp,
+            "published_at": published_at,
+            "content_hash": content_hash,
             "doc_type": "book"
         })
     
