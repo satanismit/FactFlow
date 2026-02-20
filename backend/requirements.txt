@@ -8,4 +8,6 @@ langchain-google-genai
 python-dotenv
 pypdf
 langgraph
-
+fastapi
+uvicorn
+pydantic
