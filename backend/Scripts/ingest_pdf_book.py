@@ -95,7 +95,7 @@ def ingest_pdf_book(pdf_path: str):
 
 if __name__ == "__main__":
     # Path to the PDF book
-    pdf_path = os.path.join(os.path.dirname(__file__), "..", "..", "booklet.pdf")
+    pdf_path = os.path.join(os.path.dirname(__file__), "..", "..", "ML_oreilly.pdf")
     pdf_path = os.path.abspath(pdf_path)
     
     print(f"PDF Path: {pdf_path}")
