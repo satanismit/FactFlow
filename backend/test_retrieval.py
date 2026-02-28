@@ -31,7 +31,7 @@ def test_query(retriever, generator, query):
     print("=" * 80)
 
 def main():
-    print("FactFlow System Test")
+    print("AXIOMAI System Test")
     print("Testing multiple queries to verify retrieval...\n")
     
     try:

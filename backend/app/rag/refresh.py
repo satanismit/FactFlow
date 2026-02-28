@@ -1,5 +1,5 @@
 """
-Knowledge Refresh Agent for FactFlow.
+Knowledge Refresh Agent for AXIOMAI.
 
 This agent handles re-indexing of documents in the vector database
 when knowledge is detected as stale or causing hallucinations.

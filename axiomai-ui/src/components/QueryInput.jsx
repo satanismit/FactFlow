@@ -18,7 +18,7 @@ export default function QueryInput({ onSubmit, disabled }) {
                 <input
                     type="text"
                     className="query-input"
-                    placeholder="Ask a question. FactFlow will verify before answering."
+                    placeholder="Ask a question. AXIOMAI will verify before answering."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     disabled={disabled}

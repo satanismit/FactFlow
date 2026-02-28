@@ -1,5 +1,5 @@
 """
-FactFlow LangGraph Orchestration Layer.
+AXIOMAI LangGraph Orchestration Layer.
 
 Orchestrates all agents into a stateful graph-based pipeline:
   START → retrieve → generate → validate
@@ -23,7 +23,7 @@ MAX_RETRIES = 2
 
 
 # ── State Schema ──
-class FactFlowState(TypedDict):
+class AXIOMAIState(TypedDict):
     query: str
     documents: List[Dict[str, Any]]
     answer: str
@@ -42,7 +42,7 @@ refresher = KnowledgeRefreshAgent()
 
 # ── Node Functions ──
 
-def retrieve_node(state: FactFlowState) -> dict:
+def retrieve_node(state: AXIOMAIState) -> dict:
     """Retrieve relevant documents from the vector database."""
     query = state["query"]
     documents = retriever.retrieve(query)
@@ -50,7 +50,7 @@ def retrieve_node(state: FactFlowState) -> dict:
     return {"documents": documents}
 
 
-def generate_node(state: FactFlowState) -> dict:
+def generate_node(state: AXIOMAIState) -> dict:
     """Generate an answer using the LLM based on retrieved documents."""
     query = state["query"]
     documents = state["documents"]
@@ -59,7 +59,7 @@ def generate_node(state: FactFlowState) -> dict:
     return {"answer": answer}
 
 
-def validate_node(state: FactFlowState) -> dict:
+def validate_node(state: AXIOMAIState) -> dict:
     """Validate the answer and compute trust score."""
     answer = state["answer"]
     documents = state["documents"]
@@ -68,7 +68,7 @@ def validate_node(state: FactFlowState) -> dict:
     return {"validation": validation}
 
 
-def hallucination_node(state: FactFlowState) -> dict:
+def hallucination_node(state: AXIOMAIState) -> dict:
     """Detect hallucinations in an untrusted answer."""
     answer = state["answer"]
     documents = state["documents"]
@@ -77,7 +77,7 @@ def hallucination_node(state: FactFlowState) -> dict:
     return {"hallucination": result}
 
 
-def refresh_node(state: FactFlowState) -> dict:
+def refresh_node(state: AXIOMAIState) -> dict:
     """Refresh stale knowledge and increment retry counter."""
     documents = state["documents"]
     retry_count = state.get("retry_count", 0)
@@ -88,14 +88,14 @@ def refresh_node(state: FactFlowState) -> dict:
 
 # ── Conditional Edge Functions ──
 
-def after_validate(state: FactFlowState) -> str:
+def after_validate(state: AXIOMAIState) -> str:
     """Route after validation: trusted → end, untrusted → hallucination check."""
     if state["validation"]["decision"] == "trusted":
         return "end"
     return "hallucination"
 
 
-def after_hallucination(state: FactFlowState) -> str:
+def after_hallucination(state: AXIOMAIState) -> str:
     """Route after hallucination detection: detected → refresh, safe → end."""
     retry_count = state.get("retry_count", 0)
 
@@ -107,8 +107,8 @@ def after_hallucination(state: FactFlowState) -> str:
 # ── Build the Graph ──
 
 def build_graph() -> StateGraph:
-    """Construct the FactFlow LangGraph state machine."""
-    graph = StateGraph(FactFlowState)
+    """Construct the AXIOMAI LangGraph state machine."""
+    graph = StateGraph(AXIOMAIState)
 
     # Add nodes
     graph.add_node("retrieve", retrieve_node)
@@ -156,9 +156,9 @@ def build_graph() -> StateGraph:
 _compiled_graph = build_graph()
 
 
-def run_factflow(query: str) -> dict:
+def run_axiomai(query: str) -> dict:
     """
-    Execute the full FactFlow pipeline.
+    Execute the full AXIOMAI pipeline.
 
     Args:
         query: User question string
@@ -166,7 +166,7 @@ def run_factflow(query: str) -> dict:
     Returns:
         Final state dict with: query, answer, documents, validation, hallucination
     """
-    initial_state: FactFlowState = {
+    initial_state: AXIOMAIState = {
         "query": query,
         "documents": [],
         "answer": "",
@@ -176,7 +176,7 @@ def run_factflow(query: str) -> dict:
     }
 
     print(f"\n{'=' * 60}")
-    print(f"FactFlow Pipeline")
+    print(f"AXIOMAI Pipeline")
     print(f"Query: {query}")
     print(f"{'=' * 60}\n")
 

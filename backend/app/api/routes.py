@@ -1,12 +1,12 @@
 """
-FactFlow API Routes.
+AXIOMAI API Routes.
 
 Thin API layer — all business logic lives in the orchestration graph.
 """
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
-from app.orchestration.graph import run_factflow
+from app.orchestration.graph import run_axiomai
 
 router = APIRouter()
 
@@ -31,9 +31,9 @@ class HealthResponse(BaseModel):
 
 @router.post("/query", response_model=QueryResponse)
 async def query(request: QueryRequest):
-    """Execute the full FactFlow agentic RAG pipeline."""
+    """Execute the full AXIOMAI agentic RAG pipeline."""
     try:
-        result = run_factflow(request.query)
+        result = run_axiomai(request.query)
         
         val = result.get("validation", {})
         hal = result.get("hallucination", {})
@@ -95,4 +95,4 @@ async def query(request: QueryRequest):
 @router.get("/health", response_model=HealthResponse)
 async def health():
     """Service health check."""
-    return HealthResponse(status="ok", service="FactFlow")
+    return HealthResponse(status="ok", service="AXIOMAI")

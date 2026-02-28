@@ -1,11 +1,11 @@
-# FactFlow — Complete Project Blueprint
+# AXIOMAI — Complete Project Blueprint
 
 ---
 
 ## 1. PRODUCT OVERVIEW
 
 ### What It Does
-FactFlow is a **production-grade, agentic Retrieval-Augmented Generation (RAG) system** that answers user queries by retrieving information from ingested documents, generating LLM-powered answers, and then rigorously validating those answers before delivering them. Unlike basic RAG implementations, FactFlow treats every answer as "untrusted until proven otherwise." It computes a Trust Score, detects hallucinations at the claim level, and can autonomously refresh stale knowledge — all driven by a multi-agent architecture where each agent has a single, well-defined responsibility. The system is designed for domains where accuracy is non-negotiable: legal research, medical references, compliance, education, and enterprise knowledge bases.
+AXIOMAI is a **production-grade, agentic Retrieval-Augmented Generation (RAG) system** that answers user queries by retrieving information from ingested documents, generating LLM-powered answers, and then rigorously validating those answers before delivering them. Unlike basic RAG implementations, AXIOMAI treats every answer as "untrusted until proven otherwise." It computes a Trust Score, detects hallucinations at the claim level, and can autonomously refresh stale knowledge — all driven by a multi-agent architecture where each agent has a single, well-defined responsibility. The system is designed for domains where accuracy is non-negotiable: legal research, medical references, compliance, education, and enterprise knowledge bases.
 
 ### Target Users
 | Attribute | Detail |
@@ -106,7 +106,7 @@ Sign Up → Upload Documents → System Indexes (Vector DB)
 
 #### Pinecone Vector Store
 ```
-Index: "factflow" (dimension: 384, metric: cosine)
+Index: "axiomai" (dimension: 384, metric: cosine)
 ├── Vector ID: doc_chunk_{hash}
 ├── Values: [384-dim embedding]
 └── Metadata:
@@ -401,7 +401,7 @@ GitHub Push → GitHub Actions
 4. **Performance**: 3+ second latency for a simple question will frustrate users
 
 ### Competitors
-| Competitor | Strength | FactFlow's Edge |
+| Competitor | Strength | AXIOMAI's Edge |
 |---|---|---|
 | **Perplexity AI** | Fast, great UX | No trust scoring, no custom docs |
 | **Azure AI Search** | Enterprise-grade | Expensive, vendor lock-in |
@@ -419,4 +419,4 @@ GitHub Push → GitHub Actions
 ---
 
 > *"The best RAG system is one that knows when it doesn't know."*
-> — FactFlow Design Philosophy
+> — AXIOMAI Design Philosophy

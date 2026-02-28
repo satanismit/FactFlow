@@ -1,5 +1,5 @@
 """
-Document Watcher Agent for FactFlow.
+Document Watcher Agent for AXIOMAI.
 
 Monitors document content for changes using SHA256 hashing
 and timestamp-based freshness detection. Does not perform

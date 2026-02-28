@@ -8,7 +8,7 @@ from app.api.routes import router
 if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8')
 
-app = FastAPI(title="FactFlow API")
+app = FastAPI(title="AXIOMAI API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,7 +21,8 @@ app.add_middleware(
 app.include_router(router, prefix="/api/v1")
 
 def main():
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    # Fix for Windows OSError 1455: Disable reload/multiprocessing which duplicates memory
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False, workers=1)
 
 if __name__ == "__main__":
     main()

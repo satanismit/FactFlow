@@ -1,5 +1,5 @@
 """
-FactFlow API — FastAPI entry point.
+AXIOMAI API — FastAPI entry point.
 
 Run with:
     uvicorn app.main:app --reload
@@ -14,7 +14,7 @@ from fastapi import FastAPI
 from app.api.routes import router
 
 app = FastAPI(
-    title="FactFlow API",
+    title="AXIOMAI API",
     description="Production-oriented Agentic RAG System",
     version="1.0.0",
 )
